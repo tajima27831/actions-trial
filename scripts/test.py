@@ -1,4 +1,4 @@
 print("test")
 
-with open('test.html', "w", encoding='utf-8') as f:
-    f.write('hello\n')
+with open('content/test.md', "w", encoding='utf-8') as f:
+    f.write('hello')
