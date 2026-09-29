@@ -182,7 +182,7 @@ def convert_file(input_path: Path, output_path: Path):
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_template)
 
-    print(f"変換完了: {input_path} -> {output_path}")
+    print(f"変換完了test: {input_path} -> {output_path}")
 
 
 def main():
