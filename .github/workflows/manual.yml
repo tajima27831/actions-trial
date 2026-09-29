@@ -30,13 +30,13 @@ jobs:
 
       # 2. Python環境のセットアップ (今回のスクリプトは標準ライブラリのみで動作するため pip install は不要)
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       # 3. Pythonスクリプトを実行して content/*.md から dist/*.html を生成
-      - name: Convert Markdown to HTML
-        run: python scripts/convert.py
+      - name: Run Python
+        run: python scripts/test.py
 
       # 4. GitHub Pagesの設定を準備
       #- name: Setup Pages
