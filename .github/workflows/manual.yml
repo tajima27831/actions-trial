@@ -6,7 +6,7 @@ on:
       - main  # mainブランチへのPush時に実行
     paths:
       - 'content/**/*.md'         # Markdownファイル変更時
-      #- 'scripts/**/*.py'         # 変換スクリプト変更時
+      - 'scripts/**/*.py'         # 変換スクリプト変更時
       #- '.github/workflows/*.yml' # ワークフロー定義ファイル変更時
 
 # GitHub Pagesの自動デプロイに必要なアクセス権限
