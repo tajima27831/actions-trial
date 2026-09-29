@@ -34,9 +34,12 @@ jobs:
       # 4. 変更したファイルをpush
       - name: Git Setup
         run: |
-          git config pull.ff only user.name "tajima27831"
-          git config pull.ff only user.email "tiandaoguanghui@gmail.com"
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
           git add .
-          got commit -m "test" -a
-          git pull
-          git push
+          if ! git diff --cached --exit-code --quiet; then
+            git commit -m "chore: auto-update output.txt via GitHub Actions"
+            git push
+          else
+            echo "No changes detected. Skipping commit."
+          fi
