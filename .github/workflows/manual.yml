@@ -1,18 +1,11 @@
 name: Deploy Python Generated HTML to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # mainブランチへのPush時に実行
-    paths:
-      - 'content/**/*.md'         # Markdownファイル変更時
-      - 'scripts/**/*.py'         # 変換スクリプト変更時
-      #- '.github/workflows/*.yml' # ワークフロー定義ファイル変更時
+  workflow_dispatch:
 
 # GitHub Pagesの自動デプロイに必要なアクセス権限
 permissions:
-  contents: read
-  pages: write
+  contents: write
 
 # 連続Push時に古い実行を自動キャンセルして最新ビルドを優先
 concurrency:
