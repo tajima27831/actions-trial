@@ -24,7 +24,7 @@ jobs:
       # 更新のあったmdファイルのパスをpythonに渡す？
       # 3. Pythonスクリプトを実行
       - name: Run Python
-        run: python scripts/test.py
+        run: python scripts/test.py entrance-exaM.md
       
       # 4. 変更したファイルをpush
       - name: Git Setup

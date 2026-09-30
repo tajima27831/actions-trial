@@ -7,7 +7,6 @@ if len(sys.argv) < 2:
 
 file_path = Path(sys.argv[1])
 
-# 3. 指定されたファイルが実際に存在するかチェック
 if not file_path.exists():
     print(f"【エラー】指定されたファイルが見つかりません: {file_path}")
     sys.exit(0)
