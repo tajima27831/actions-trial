@@ -1,16 +1,10 @@
-name: Deploy Python Generated HTML to GitHub Pages
+name: Generate HTML
 
 on:
   workflow_dispatch:
 
-# GitHub Pagesの自動デプロイに必要なアクセス権限
 permissions:
   contents: write
-
-# 連続Push時に古い実行を自動キャンセルして最新ビルドを優先
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -27,7 +21,8 @@ jobs:
         with:
           python-version: '3.14'
 
-      # 3. Pythonスクリプトを実行して content/*.md から dist/*.html を生成
+      # 更新のあったmdファイルのパスをpythonに渡す？
+      # 3. Pythonスクリプトを実行
       - name: Run Python
         run: python scripts/test.py
       
