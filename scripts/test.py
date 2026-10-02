@@ -9,13 +9,24 @@ source_file_path = Path(sys.argv[1])
 index_file_path = Path(sys.argv[2])
 
 if not source_file_path.exists():
-    print(f"【エラー】指定されたファイルが見つかりません: {source_file_path}")#fはpath型をstring型に自動で変えるために必要
+    print(f"【エラー】指定されたファイルが見つかりません: {source_file_path}")
+    #fはpath型をstring型に自動で変えるために必要
     sys.exit(0)
 
-with open(source_file_path, mode="r", encoding="utf-8") as f:
-    for line in f:
-        print("これから\n"+line+"で作業する")
+
+
+with open(source_file_path, mode="r", encoding="utf-8") as source:
+    for line in source:
+        if line=="":
+            continue
         if not line[0] in ["-"," "]:
-            print("いま！")
-            with open(index_file_path, "w", encoding="utf-8") as file:
-                file.write("test")
+            continue
+        print("これから\n" + line + "で作業する")
+        if line[0] == "-":
+            with open(index_file_path, "w", encoding="utf-8") as index:
+                metadata = line.split(":")
+                if not len(metadata) == 3:
+                    print("メタデータの異常")
+                    sys.exit(1)
+                title = metadata[1]
+                print(title)
