@@ -65,17 +65,15 @@ header_4 = [
 
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
-        if line == "":
-            path_from_source_list = line.split("/")
-            path_length = len(path_from_source_list)-1
-            if not (len(path_from_source_list) == len(html_file_path_list) == len(source_file_path_list)):
+        path_from_source_list = line.split("/")
+        path_length = len(path_from_source_list)-1
+        if not (len(path_from_source_list) == len(html_file_path_list) == len(source_file_path_list)):
+            print("pathの長さが合いません")
+            sys.exit(1)
+        for i in range(path_length):
+            if not (path_from_source_list[i] == html_file_path_list[i] == source_file_path_list[i]):
                 print("pathが合いません")
                 sys.exit(1)
-            for i in range(path_length):
-                if not (path_from_source_list[i] == html_file_path_list[i] == source_file_path_list[i]):
-                    print("pathが合いません")
-                    sys.exit(1)
-            continue
         if not line[0] in ["-"," "]:
             continue
 
@@ -84,12 +82,12 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 #---------------------メタデータ-------------------------
                 metadata = line.split(":")
                 if not len(metadata) == 3:
-                    print("メタデータの異常")
+                    print("メタデータの数が合いません")
                     sys.exit(1)
                 title_list = metadata[1].split("/")
                 title = title_list[path_length-2]
                 if not len(title_list)-1 == path_length:
-                    print("日本語タイトルの過不足")
+                    print("日本語タイトルの数が合いません")
                     sys.exit(1)
                 description = metadata[2]
 
@@ -102,3 +100,5 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 for i in range(path_length-1):
                     print("          <li><a href=\"" + path_from_source_list[i] + "/\">" + title_list[i] + "</a></li>", file=index)
                 print("          <li><span aria-current=\"page\">" + title + "</span></li>", file=index)
+                # 各行を読んで本文をリストに収めながら、indexに目次を書き込んでいく。
+                # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
