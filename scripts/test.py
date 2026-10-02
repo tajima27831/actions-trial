@@ -11,14 +11,15 @@ if len(sys.argv) < 3:
 source_file_path = Path(sys.argv[1])
 index_file_path = Path(sys.argv[2])
 
+source_file_path_list = sys.argv[1].split("/")
+html_file_path_list = sys.argv[2].split("/")
+
 if not source_file_path.exists():
     print(f"【エラー】指定されたファイルが見つかりません: {source_file_path}")
     #fはpath型をstring型に自動で変えるために必要
     sys.exit(0)
 
 today = datetime.date.today()
-
-path_list = sys.argv[1].split("/")
 
 #--------------------------ヘッダー--------------------------------
 
@@ -47,11 +48,12 @@ header_3 = [
     "",
     "      <nav aria-label=\"Breadcrumb\">",
     "        <ul class=\"breadcrumb\">",
-    "          <li><a href=\"\">ホーム</a></li>",
-    "          <li><a href=\"" + path_list[0] + "/\">"
+    "          <li><a href=\"\">ホーム</a></li>"
 ]
-# 上の階層の日本語のタイトルがパンくずリストのために要る
+
 header_4 = [
+    "        </ul>",
+    "      </nav>",
     "",
     "      <div class=\"last-update\">このページの最終更新：<time datetime=\"" + today.strftime("%Y-%m-%d") + "\">" + today.strftime("%Y年%m月%d日") + "</time></div>",
     "",
@@ -63,7 +65,16 @@ header_4 = [
 
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
-        if line=="":
+        if line == "":
+            path_from_source_list = line.split("/")
+            path_length = len(path_from_source_list)-1
+            if not (len(path_from_source_list) == len(html_file_path_list) == len(source_file_path_list)):
+                print("pathが合いません")
+                sys.exit(1)
+            for i in range(path_length):
+                if not (path_from_source_list[i] == html_file_path_list[i] == source_file_path_list[i]):
+                    print("pathが合いません")
+                    sys.exit(1)
             continue
         if not line[0] in ["-"," "]:
             continue
@@ -75,7 +86,11 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 if not len(metadata) == 3:
                     print("メタデータの異常")
                     sys.exit(1)
-                title = metadata[1]
+                title_list = metadata[1].split("/")
+                title = title_list[path_length-2]
+                if not len(title_list)-1 == path_length:
+                    print("日本語タイトルの過不足")
+                    sys.exit(1)
                 description = metadata[2]
 
                 #------------ヘッダー---------------------------------
@@ -83,4 +98,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 print(description, end="", file=index)
                 print(hedaer_2, end="", file=index)
                 print(title, end="", file=index)
-                print(*header_3, sep="\n", end="", file=index)
+                print(*header_3, sep="\n", file=index)
+                for i in range(path_length-1):
+                    print("          <li><a href=\"" + path_from_source_list[i] + "/\">" + title_list[i] + "</a></li>", file=index)
+                print("          <li><span aria-current=\"page\">" + title + "</span></li>", file=index)
