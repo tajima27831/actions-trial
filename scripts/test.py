@@ -2,6 +2,8 @@ from pathlib import Path
 import sys
 import datetime
 
+#-----------------------------準備-----------------------------------
+
 if len(sys.argv) < 3:
     print("【エラー】ファイルのパスを指定してください。")
     sys.exit(0)  # プログラムを終了する ０は正常終了
@@ -15,6 +17,10 @@ if not source_file_path.exists():
     sys.exit(0)
 
 today = datetime.date.today()
+
+path_list = sys.argv[1].split("/")
+
+#--------------------------ヘッダー--------------------------------
 
 header_1 = [
     "<!doctype html>",
@@ -39,11 +45,19 @@ header_3 = [
     "",
     "      <hr>",
     "",
-    "      <div class=\"last-update\">このページの最終更新：<time datetime=\"" + today.strftime("%Y-%M-%D") + "\">" + today.strftime("%Y年%M月%D日") + "</time></div>",
+    "      <nav aria-label=\"Breadcrumb\">",
+    "        <ul class=\"breadcrumb\">",
+    "          <li><a href=\"\">ホーム</a></li>",
+    "          <li><a href=\"" + path_list[0] + "/\">"
+]
+# 上の階層の日本語のタイトルがパンくずリストのために要る
+header_4 = [
+    "",
+    "      <div class=\"last-update\">このページの最終更新：<time datetime=\"" + today.strftime("%Y-%m-%d") + "\">" + today.strftime("%Y年%m月%d日") + "</time></div>",
     "",
     "      <nav>",
     "        このページの目次",
-    "        <ul>",
+    "        <ul class=\"contents\">",
     "          <li>"
 ]
 
@@ -53,12 +67,10 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             continue
         if not line[0] in ["-"," "]:
             continue
-        print("これから\n" + line + "で作業する")
-
-        #---------------------メタデータ-------------------------
 
         if line[0] == "-":
             with open(index_file_path, "w", encoding="utf-8") as index:
+                #---------------------メタデータ-------------------------
                 metadata = line.split(":")
                 if not len(metadata) == 3:
                     print("メタデータの異常")
