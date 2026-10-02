@@ -14,7 +14,7 @@ if not source_file_path.exists():
 
 with open(source_file_path, mode="r", encoding="utf-8") as f:
     for line in f:
-        print("これから "+line+" で作業する")
-        if "-" not in line:
+        print("これから\n"+line+"で作業する")
+        if not line[0] in ["-"," "]:
             with open(index_file_path, "w", encoding="utf-8") as file:
                 file.write("test")
