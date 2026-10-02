@@ -30,4 +30,4 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     print("メタデータの異常")
                     sys.exit(1)
                 title = metadata[1]
-                print(title)
+        print(title)
