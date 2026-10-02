@@ -14,9 +14,6 @@ path_length = len(directory_path_list)
 
 index_file_path = Path("/".join(directory_path_list) + "/index.html")
 
-print(index_file_path)
-sys.exit(0)
-
 if not source_file_path.exists():
     print(f"【エラー】指定されたファイルが見つかりません: {source_file_path}")
     #fはpath型をstring型に自動で変えるために必要
