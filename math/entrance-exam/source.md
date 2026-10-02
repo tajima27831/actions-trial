@@ -1,4 +1,4 @@
-entrance-exam/
+math/entrance-exam/
 
 - index.html; 院試体験記; 早稲田大学の数学科の学生が早稲田大学と千葉大学の修士課程入試を受けた時の記録です。
   - 概要: overview
