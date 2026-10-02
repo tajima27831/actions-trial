@@ -4,15 +4,18 @@ import datetime
 
 #-----------------------------準備-----------------------------------
 
-if len(sys.argv) < 3:
+if len(sys.argv) < 2:
     print("【エラー】ファイルのパスを指定してください。")
     sys.exit(0)  # プログラムを終了する ０は正常終了
 
 source_file_path = Path(sys.argv[1])
-index_file_path = Path(sys.argv[2])
+directory_path_list = sys.argv[1].split("/")[:-1]
+path_length = len(directory_path_list)
 
-source_file_path_list = sys.argv[1].split("/")
-html_file_path_list = sys.argv[2].split("/")
+index_file_path = Path("/".join(directory_path_list) + "/index.html")
+
+print(index_file_path)
+sys.exit(0)
 
 if not source_file_path.exists():
     print(f"【エラー】指定されたファイルが見つかりません: {source_file_path}")
@@ -65,13 +68,12 @@ header_4 = [
 
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
-        path_from_source_list = line.split("/")
-        path_length = len(path_from_source_list)-1
-        if not (len(path_from_source_list) == len(html_file_path_list) == len(source_file_path_list)):
+        path_from_source_list = line.split("/")[:-1]
+        if not len(path_from_source_list) == path_length:
             print("pathの長さが合いません")
             sys.exit(1)
         for i in range(path_length):
-            if not (path_from_source_list[i] == html_file_path_list[i] == source_file_path_list[i]):
+            if not path_from_source_list[i] == directory_path_list[i]:
                 print("pathが合いません")
                 sys.exit(1)
         if not line[0] in ["-"," "]:
