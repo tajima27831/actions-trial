@@ -16,5 +16,6 @@ with open(source_file_path, mode="r", encoding="utf-8") as f:
     for line in f:
         print("これから\n"+line+"で作業する")
         if not line[0] in ["-"," "]:
+            print("いま！")
             with open(index_file_path, "w", encoding="utf-8") as file:
                 file.write("test")
