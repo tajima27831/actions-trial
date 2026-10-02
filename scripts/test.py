@@ -22,6 +22,9 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
         if not line[0] in ["-"," "]:
             continue
         print("これから\n" + line + "で作業する")
+
+        #---------------------メタデータ-------------------------
+        
         if line[0] == "-":
             with open(index_file_path, "w", encoding="utf-8") as index:
                 metadata = line.split(":")
