@@ -13,8 +13,6 @@ if not source_file_path.exists():
     #fはpath型をstring型に自動で変えるために必要
     sys.exit(0)
 
-
-
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
         if line=="":
@@ -24,7 +22,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
         print("これから\n" + line + "で作業する")
 
         #---------------------メタデータ-------------------------
-        
+
         if line[0] == "-":
             with open(index_file_path, "w", encoding="utf-8") as index:
                 metadata = line.split(":")
