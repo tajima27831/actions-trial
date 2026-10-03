@@ -112,12 +112,11 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
 
             header_breadcrumb.append("      <nav aria-label=\"Breadcrumb\">")
             header_breadcrumb.append("        <ul class=\"breadcrumb\">")
-            header_breadcrumb.append("")
             for i in range(path_length-1):
                 header_breadcrumb.append("          <li><a href=\"")
                 for j in range(i):
-                    header_breadcrumb.append(directory_path_from_source_list[j] + "/")
-                header_breadcrumb.append("\">" + title_list[i] + "</a></li>")
+                    header_breadcrumb[-1] += (directory_path_from_source_list[j] + "/")
+                header_breadcrumb[-1] += ("\">" + title_list[i] + "</a></li>")
             header_breadcrumb.append("          <li><span aria-current=\"page\">" + title + "</span></li>")
             header_breadcrumb.append("      </nav>")
 
@@ -126,6 +125,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
         # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
 
 #--------------------------------------生成---------------------------------------------
+print(str(index_file_path))
 with open(index_file_path, "w", encoding="utf-8") as result:
     print(*head_1, sep="\n", file=result)
     print(*head_metadata, sep="\n", file=result)
