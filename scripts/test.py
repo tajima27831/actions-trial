@@ -112,7 +112,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
 
             header_breadcrumb.append("      <nav aria-label=\"Breadcrumb\">")
             header_breadcrumb.append("        <ul class=\"breadcrumb\">")
-            for i in range(path_length-1):
+            for i in range(path_length):
                 header_breadcrumb.append("          <li><a href=\"")
                 for j in range(i):
                     header_breadcrumb[-1] += (directory_path_from_source_list[j] + "/")
