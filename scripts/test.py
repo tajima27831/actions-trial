@@ -65,20 +65,24 @@ header_4 = [
 
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
-        path_from_source_list = line.split("/")[:-1]
-        if not len(path_from_source_list) == path_length:
-            print("pathの長さが合いません")
-            sys.exit(1)
-        for i in range(path_length):
-            if not path_from_source_list[i] == directory_path_list[i]:
-                print("pathが合いません")
-                sys.exit(1)
-        if not line[0] in ["-"," "]:
+        if line == "":
             continue
 
+        #--------------------------------mdの一行目--------------------------------------
+        if not line[0] in ["-"," "]:
+            directory_path_from_source_list = line.split("/")[:-1]
+            if not len(directory_path_from_source_list) == path_length:
+                print("pathの長さが合いません")
+                sys.exit(1)
+            for i in range(path_length):
+                if not directory_path_from_source_list[i] == directory_path_list[i]:
+                    print("pathが合いません")
+                    sys.exit(1)
+
+        #--------------------------------mdの三行目---------------------------------
         if line[0] == "-":
             with open(index_file_path, "w", encoding="utf-8") as index:
-                #---------------------メタデータ-------------------------
+                #---------------------メタデータの取得-------------------------
                 metadata = line.split(":")
                 if not len(metadata) == 3:
                     print("メタデータの数が合いません")
@@ -90,14 +94,14 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     sys.exit(1)
                 description = metadata[2]
 
-                #------------ヘッダー---------------------------------
+                #----------------------ヘッダーの書き込み---------------------------
                 print(*header_1, sep="\n", end="", file=index)
                 print(description, end="", file=index)
                 print(hedaer_2, end="", file=index)
                 print(title, end="", file=index)
                 print(*header_3, sep="\n", file=index)
                 for i in range(path_length-1):
-                    print("          <li><a href=\"" + path_from_source_list[i] + "/\">" + title_list[i] + "</a></li>", file=index)
+                    print("          <li><a href=\"" + directory_path_from_source_list[i] + "/\">" + title_list[i] + "</a></li>", file=index)
                 print("          <li><span aria-current=\"page\">" + title + "</span></li>", file=index)
                 # 各行を読んで本文をリストに収めながら、indexに目次を書き込んでいく。
                 # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
