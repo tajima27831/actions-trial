@@ -10,7 +10,7 @@ if len(sys.argv) < 2:
 
 source_file_path = Path(sys.argv[1])
 directory_path_list = sys.argv[1].split("/")[:-1]
-path_length = len(directory_path_list)
+path_length = len(directory_path_list)#ホームを含めない
 
 index_file_path = Path("/".join(directory_path_list) + "/index.html")
 
@@ -83,9 +83,10 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
 
         #--------------------------------mdの一行目--------------------------------------
         if not line[0] in ["-"," "]:
-            directory_path_from_source_list = line.split("/")[:-1]
-            if not len(directory_path_from_source_list) == path_length:
+            directory_path_from_source_list = line.split("/")[:-1]#ホームから始まる
+            if not len(directory_path_from_source_list) == path_length+1:
                 print("pathの長さが合いません")
+                print(len(directory_path_from_source_list))
                 sys.exit(1)
             for i in range(path_length):
                 if not directory_path_from_source_list[i] == directory_path_list[i]:
@@ -125,4 +126,3 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
         #-----------------------------本文---------------------------------------------
         # 各行を読んで本文をリストに収めながら、headerに目次を書き込んでいく。
         # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
-        
