@@ -27,7 +27,7 @@ jobs:
         run: python scripts/test.py math/entrance-exam/test/go/source.md
       
       # 4. 変更したファイルをpush
-      - name: Git Setup
+      - name: Git Push
         run: |
           git config --local user.email "github-actions[bot]@://github.com"
           git config --local user.name "github-actions[bot]"

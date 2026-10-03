@@ -103,7 +103,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             if not len(title_list) == path_length+1:
                 print("日本語タイトルの数が合いません")
                 sys.exit(1)
-            description = metadata[2]
+            description = metadata[2].strip()
 
             head_metadata = [
                 "    <meta name=\"description\" content=\"" + description + "\"/>",
