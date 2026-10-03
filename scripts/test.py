@@ -9,7 +9,7 @@ if len(sys.argv) < 2:
     sys.exit(1)  # プログラムを終了する ０は正常終了
 
 source_file_path = Path(sys.argv[1])
-directory_path_list = sys.argv[1].split("/")[:-1]
+directory_path_list = sys.argv[1].split("/")[:-1]#一番最後の空stringを削除したリスト
 path_length = len(directory_path_list)#ホームを含まない
 
 index_file_path = Path("/".join(directory_path_list) + "/index.html")
@@ -98,12 +98,12 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             if not len(metadata) == 3:
                 print("メタデータの数が合いません")
                 sys.exit(1)
-            title_list = metadata[1].split("/")[:-1]
+            title_list = metadata[1].split("/")[:-1] # 一番最後の空を削除
             title = title_list[path_length]
             if not len(title_list) == path_length+1:
                 print("日本語タイトルの数が合いません")
                 sys.exit(1)
-            description = metadata[2].strip()
+            description = metadata[2].strip() # 最後の開業文字を削除
 
             head_metadata = [
                 "    <meta name=\"description\" content=\"" + description + "\"/>",
