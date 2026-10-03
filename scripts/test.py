@@ -99,7 +99,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 print("メタデータの数が合いません")
                 sys.exit(1)
             title_list = metadata[1].split("/")[:-1]
-            title = title_list[path_length-1]
+            title = title_list[path_length]
             if not len(title_list) == path_length+1:
                 print("日本語タイトルの数が合いません")
                 sys.exit(1)
