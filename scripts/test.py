@@ -115,6 +115,8 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             for i in range(path_length):
                 header_breadcrumb.append("          <li><a href=\"")
                 for j in range(i+1):
+                    if j == 0:
+                        continue
                     header_breadcrumb[-1] += (directory_path_from_source_list[j-1] + "/")
                 header_breadcrumb[-1] += ("\">" + title_list[i] + "</a></li>")
             header_breadcrumb.append("          <li><span aria-current=\"page\">" + title + "</span></li>")
