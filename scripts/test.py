@@ -21,47 +21,60 @@ if not source_file_path.exists():
 
 today = datetime.date.today()
 
-#--------------------------ヘッダー--------------------------------
+#--------------------------ヘッド--------------------------------
 
-header_1 = [
+head_1 = [
     "<!doctype html>",
     "<html lang=\"ja\">",
     "  <head>",
     "    <link rel=\"icon\" href=\"resources/images/diagram.jpg\" type=\"image/x-icon\"/>",
     "    <meta charset=\"UTF-8\"/>",
     "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>",
-    "    <meta name=\"description\" content=\""
+    "    <link href=\"resources/styles/common.css\" rel=\"stylesheet\"/>"
 ]
 
-hedaer_2 = "\"/>\n    <title>"
+head_metadata = [
+]
 
-header_3 = [
-    "｜強迫的敗北主義反芻派</title>",
-    "    <link href=\"resources/styles/common.css\" rel=\"stylesheet\"/>",
-    "  </head>",
-    "",
+head_2 = [
+    "  </head>"
+]
+
+#--------------------------------ヘッダー-----------------------------------
+
+header_1 = [
     "  <body>",
     "    <header>",
     "      <div class=\"site-name\">強迫的敗北主義反芻派</div>",
     "",
     "      <hr>",
+    ""
+]
+
+header_breadcrumb = [
+]
+
+header_2 = [
     "",
-    "      <nav aria-label=\"Breadcrumb\">",
-    "        <ul class=\"breadcrumb\">",
-    "          <li><a href=\"\">ホーム</a></li>"
+    "      <div class=\"last-update\">このページの最終更新：<time datetime=\"" + today.strftime("%Y-%m-%d") + "\">" + today.strftime("%Y年%m月%d日") + "</time></div>",
+    ""
+]
+
+header_contents = [
 ]
 
 header_4 = [
-    "        </ul>",
-    "      </nav>",
     "",
-    "      <div class=\"last-update\">このページの最終更新：<time datetime=\"" + today.strftime("%Y-%m-%d") + "\">" + today.strftime("%Y年%m月%d日") + "</time></div>",
-    "",
-    "      <nav>",
-    "        このページの目次",
-    "        <ul class=\"contents\">",
-    "          <li>"
+    "      <div class=\"page-pdf\"><a class=\"pdf\" href=\"/test.pdf\" download>このページのpdfをダウンロード</a></div>",
+    "    </header>"
 ]
+
+#----------------------------------メイン------------------------------------
+
+main_1 = [
+]
+
+#---------------------------------抽出---------------------------------------
 
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
@@ -73,8 +86,6 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             directory_path_from_source_list = line.split("/")[:-1]
             if not len(directory_path_from_source_list) == path_length:
                 print("pathの長さが合いません")
-                print(line)
-                print(sys.argv[1])
                 sys.exit(1)
             for i in range(path_length):
                 if not directory_path_from_source_list[i] == directory_path_list[i]:
@@ -83,27 +94,35 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
 
         #--------------------------------mdの三行目---------------------------------
         if line[0] == "-":
-            with open(index_file_path, "w", encoding="utf-8") as index:
-                #---------------------メタデータの取得-------------------------
-                metadata = line.split(":")
-                if not len(metadata) == 3:
-                    print("メタデータの数が合いません")
-                    sys.exit(1)
-                title_list = metadata[1].split("/")
-                title = title_list[path_length-2]
-                if not len(title_list)-1 == path_length:
-                    print("日本語タイトルの数が合いません")
-                    sys.exit(1)
-                description = metadata[2]
+            #---------------------メタデータの取得-------------------------
+            metadata = line.split(":")
+            if not len(metadata) == 3:
+                print("メタデータの数が合いません")
+                sys.exit(1)
+            title_list = metadata[1].split("/")[:-1]
+            title = title_list[path_length-1]
+            if not len(title_list) == path_length:
+                print("日本語タイトルの数が合いません")
+                sys.exit(1)
+            description = metadata[2]
 
-                #----------------------ヘッダーの書き込み---------------------------
-                print(*header_1, sep="\n", end="", file=index)
-                print(description, end="", file=index)
-                print(hedaer_2, end="", file=index)
-                print(title, end="", file=index)
-                print(*header_3, sep="\n", file=index)
-                for i in range(path_length-1):
-                    print("          <li><a href=\"" + directory_path_from_source_list[i] + "/\">" + title_list[i] + "</a></li>", file=index)
-                print("          <li><span aria-current=\"page\">" + title + "</span></li>", file=index)
-                # 各行を読んで本文をリストに収めながら、indexに目次を書き込んでいく。
-                # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
+            head_metadata = [
+                "    <meta name=\"description\" content=\"" + description + "\"/>",
+                "    <title>" + title + "｜強迫的敗北主義反芻派</title>"
+            ]
+
+            header_breadcrumb.append("      <nav aria-label=\"Breadcrumb\">")
+            header_breadcrumb.append("        <ul class=\"breadcrumb\">")
+            header_breadcrumb.append("")
+            for i in range(path_length-1):
+                header_breadcrumb.append("          <li><a href=\"")
+                for j in range(i):
+                    header_breadcrumb.append(directory_path_from_source_list[j] + "/")
+                header_breadcrumb.append("\">" + title_list[i] + "</a></li>")
+            header_breadcrumb.append("          <li><span aria-current=\"page\">" + title + "</span></li>")
+            header_breadcrumb.append("      </nav>")
+
+        #-----------------------------本文---------------------------------------------
+        # 各行を読んで本文をリストに収めながら、headerに目次を書き込んでいく。
+        # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
+        
