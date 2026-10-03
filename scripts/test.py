@@ -73,6 +73,8 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             directory_path_from_source_list = line.split("/")[:-1]
             if not len(directory_path_from_source_list) == path_length:
                 print("pathの長さが合いません")
+                print(line)
+                print(sys.argv[1])
                 sys.exit(1)
             for i in range(path_length):
                 if not directory_path_from_source_list[i] == directory_path_list[i]:
