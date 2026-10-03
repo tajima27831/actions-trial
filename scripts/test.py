@@ -65,7 +65,7 @@ header_4 = [
 
 with open(source_file_path, mode="r", encoding="utf-8") as source:
     for line in source:
-        if line == "":
+        if line == "\n":
             continue
 
         #--------------------------------mdの一行目--------------------------------------
