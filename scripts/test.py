@@ -10,7 +10,7 @@ if len(sys.argv) < 2:
 
 source_file_path = Path(sys.argv[1])
 directory_path_list = sys.argv[1].split("/")[:-1]
-path_length = len(directory_path_list)#ホームを含めない
+path_length = len(directory_path_list)#ホームを含む
 
 index_file_path = Path("/".join(directory_path_list) + "/index.html")
 
@@ -84,7 +84,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
         #--------------------------------mdの一行目--------------------------------------
         if not line[0] in ["-"," "]:
             directory_path_from_source_list = line.split("/")[:-1]#ホームから始まる
-            if not len(directory_path_from_source_list) == path_length+1:
+            if not len(directory_path_from_source_list) == path_length:
                 print("pathの長さが合いません")
                 print(len(directory_path_from_source_list))
                 sys.exit(1)
