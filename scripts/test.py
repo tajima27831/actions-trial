@@ -63,9 +63,7 @@ header_2 = [
 header_contents = [
 ]
 
-header_4 = [
-    "",
-    "      <div class=\"page-pdf\"><a class=\"pdf\" href=\"/test.pdf\" download>このページのpdfをダウンロード</a></div>",
+header_3 = [
     "    </header>"
 ]
 
@@ -126,3 +124,15 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
         #-----------------------------本文---------------------------------------------
         # 各行を読んで本文をリストに収めながら、headerに目次を書き込んでいく。
         # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
+
+#--------------------------------------生成---------------------------------------------
+with open(index_file_path, "w", encoding="utf-8") as result:
+    print(*head_1, sep="\n", file=result)
+    print(*head_metadata, sep="\n", file=result)
+    print(*head_2, sep="\n", file=result)
+    print(*header_1, sep="\n", file=result)
+    print(*header_breadcrumb, sep="\n", file=result)
+    print(*header_2, sep="\n", file=result)
+    print(*header_contents, sep="\n", file=result)
+    print(*header_3, sep="\n", file=result)
+    print(*main_1, sep="\n", file=result)
