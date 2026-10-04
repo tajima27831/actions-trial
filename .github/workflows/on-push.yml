@@ -2,6 +2,8 @@ name: check diff
 
 on:
   push:
+    paths:
+        - '**.md'
 
 env:
   BASE_DIR: "./"
