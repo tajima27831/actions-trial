@@ -227,6 +227,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     nest_stack += "section"
                     main.append("")
                     main.append(indent_list[len(nest_stack)+2] + "<section id=\"" + section_id + "\">")
+                    print(nest_stack)
                     main.append(h_before[len(nest_stack)] + section_title + h_after[len(nest_stack)])
                     header_contents.append(indent_list[len(nest_stack)*2+2] + "<ul>")
                     header_contents.append(indent_list[len(nest_stack)*2+3] + "<li>")
