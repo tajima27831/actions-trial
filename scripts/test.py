@@ -21,6 +21,34 @@ if not source_file_path.exists():
 
 today = datetime.date.today()
 
+nest_stack = [] # ネスト
+
+h_before = [
+    "      <h1>",
+    "        <h2>",
+    "          <h3>",
+    "            <h4>"
+]
+h_after = [
+    "</h1>",
+    "</h2>",
+    "</h3>",
+    "</h4>"
+]
+
+indent_list = [ # インデント用の空白 indexの二倍の数の半角スペース
+    "",
+    "  ",
+    "    ",
+    "      ",
+    "        ",
+    "          ",
+    "            ",
+    "              ",
+    "                ",
+    "                  "
+]
+
 #--------------------------ヘッド--------------------------------
 
 head_1 = [
@@ -61,6 +89,8 @@ header_2 = [
 ]
 
 header_contents = [
+    "      <nav class=\"contents\">",
+    "        このページの目次："
 ]
 
 header_3 = [
@@ -69,7 +99,23 @@ header_3 = [
 
 #----------------------------------メイン------------------------------------
 
-main_1 = [
+main = [
+    "    <main>"
+]
+
+#---------------------------------フッター------------------------------------------
+
+footer = [
+    "",
+    "<hr>",
+    "",
+    "    <footer>",
+    "      <nav class=\"back-to-top\">",
+    "        <a href=\"#\">このページの一番上へ</a>",
+    "      </nav>",
+    "    </footer>",
+    "  </body>",
+    "</html>"
 ]
 
 #---------------------------------抽出---------------------------------------
@@ -90,6 +136,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 if not directory_path_from_source_list[i+1] == directory_path_list[i]:
                     print("pathが合いません")
                     sys.exit(1)
+            continue
 
         #--------------------------------mdの三行目---------------------------------
         if line[0] == "-":
@@ -120,9 +167,88 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             header_breadcrumb.append("          <li><span aria-current=\"page\">" + title + "</span></li>")
             header_breadcrumb.append("      </nav>")
 
-        #-----------------------------本文---------------------------------------------
+            main.append(h_before[0] + title + h_after[0])
+            continue
+
+        if not line[0] == " ":
+            print(line)
+            print("mdファイルの異常")
+            sys.exit(1)
+
+        #-----------------------------メイン---------------------------------------------
         # 各行を読んで本文をリストに収めながら、headerに目次を書き込んでいく。
         # 一番下まで行ったらリストを書き込み、最後にフッターを足す。
+
+        striped_line = line.strip("-")
+
+        #------------------------------見出しか箇条書き--------------------------------
+        if striped_line[0] == ":":
+            if len(striped_line.split(":")) > 3:
+                print(striped_line)
+                print("md内での構文ミス")
+                sys.exit(1)
+            #------------------------------箇条書き----------------------------------
+            if len(striped_line.split(":")) == 2:
+                nest_stack.append("ul")
+                main.append(indent_list[len(nest_stack)+2] + "<ul>")
+
+            #--------------------------------見出し-----------------------------------
+            if len(striped_line.split(":")) == 3:
+                if nest_stack[-1] == "ul": # 箇条書きを閉じる
+                    main.append(indent_list[len(nest_stack)+2] + "</ul>")
+                    del nest_stack[-1:]
+                
+                section_title = line.split(":")[1]
+                section_id = line.split(":")[2]
+                if not len(section_id.split("/"))*2 == len(line.split(":"))-2:
+                    print("セクションのidのミス")
+                    print(section_title + "  " + section_id)
+                    sys.exit(1)
+                
+                while len(section_id.split("/")) < len(nest_stack): # ネストを同じ深さ以下にする
+                    main.append(indent_list[len(nest_stack)+2] + "</section>")
+                    header_contents.append(indent_list[len(nest_stack)*2+3] + "</li>")
+                    header_contents.append(indent_list[len(nest_stack)*2+2] + "</ul>")
+                    del nest_stack[-1:]
+                
+                if len(section_id.split("/")) == len(nest_stack): # 同じ深さを閉じてから始めるとき
+                    main.append(indent_list[len(nest_stack)+2] + "</section>")
+                    main.append("")
+                    main.append(indent_list[len(nest_stack)+2] + "<section id=\"" + section_id + "\">")
+                    main.append(h_before[len(nest_stack)] + section_title + h_after[len(nest_stack)])
+                    header_contents.append(indent_list[len(nest_stack)*2+3] + "</li>")
+                    header_contents.append(indent_list[len(nest_stack)*2+3] + "<li>")
+                    header_contents.append(indent_list[len(nest_stack)*2+4] + "<a href=\"#" + section_id + "\">" + section_title + "</a>")
+                
+                if len(section_id.split("/")) > len(nest_stack): # 新しい深さに入るとき
+                    nest_stack += "section"
+                    main.append("")
+                    main.append(indent_list[len(nest_stack)+2] + "<section id=\"" + section_id + "\">")
+                    main.append(h_before[len(nest_stack)] + section_title + h_after[len(nest_stack)])
+                    header_contents.append(indent_list[len(nest_stack)*2+2] + "<ul>")
+                    header_contents.append(indent_list[len(nest_stack)*2+3] + "<li>")
+                    header_contents.append(indent_list[len(nest_stack)*2+4] + "<a href=\"#" + section_id + "\">" + section_title + "</a>")
+            continue
+
+        #-----------------------------------本文か見出しの項目------------------------------------
+        if nest_stack[-1] == "section":
+            main.append(indent_list[len(nest_stack)+3] + "<p>" + striped_line + "</p>")
+        if nest_stack[-1] == "ul":
+            main.append(indent_list[len(nest_stack)+4] + "<li>" + striped_line + "</li>")
+
+#-------------------------------------------メインの最後にタグを閉じる------------------------
+while 0 < len(nest_stack): # ネストを同じ深さ以下にする
+    if nest_stack[-1] == "ul": # 箇条書きを閉じる
+        main.append(indent_list[len(nest_stack)+2] + "</ul>")
+        del nest_stack[-1:]
+        continue
+    main.append(indent_list[len(nest_stack)+2] + "</section>")
+    header_contents.append(indent_list[len(nest_stack)*2+3] + "</li>")
+    header_contents.append(indent_list[len(nest_stack)*2+2] + "</ul>")
+    del nest_stack[-1:]
+
+main.append("    </main>")
+header_contents.append("      </nav>")
 
 #--------------------------------------生成---------------------------------------------
 print(str(index_file_path))
@@ -135,4 +261,5 @@ with open(index_file_path, "w", encoding="utf-8") as result:
     print(*header_2, sep="\n", file=result)
     print(*header_contents, sep="\n", file=result)
     print(*header_3, sep="\n", file=result)
-    print(*main_1, sep="\n", file=result)
+    print(*main, sep="\n", file=result)
+    print(*footer, sep="\n", file=result)
