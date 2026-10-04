@@ -58,10 +58,10 @@ head_1 = [
     "<!doctype html>",
     "<html lang=\"ja\">",
     "  <head>",
-    "    <link rel=\"icon\" href=\"resources/images/diagram.jpg\" type=\"image/x-icon\"/>",
+    "    <link rel=\"icon\" href=\"/resources/images/diagram.jpg\" type=\"image/x-icon\"/>",
     "    <meta charset=\"UTF-8\"/>",
     "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>",
-    "    <link href=\"resources/styles/common.css\" rel=\"stylesheet\"/>"
+    "    <link href=\"/resources/styles/common.css\" rel=\"stylesheet\"/>"
 ]
 
 head_metadata = [
@@ -168,6 +168,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     header_breadcrumb[-1] += (directory_path_from_source_list[j] + "/")
                 header_breadcrumb[-1] += ("\">" + title_list[i] + "</a></li>")
             header_breadcrumb.append("          <li><span aria-current=\"page\">" + title + "</span></li>")
+            header_breadcrumb.append("        </ul>")
             header_breadcrumb.append("      </nav>")
 
             main.append(h_before[0] + title + h_after[0])
@@ -263,6 +264,7 @@ with open(index_file_path, "w", encoding="utf-8") as result:
     print(*head_1, sep="\n", file=result)
     print(*head_metadata, sep="\n", file=result)
     print(*head_2, sep="\n", file=result)
+    print("", file=result)
     print(*header_1, sep="\n", file=result)
     print(*header_breadcrumb, sep="\n", file=result)
     print(*header_2, sep="\n", file=result)
