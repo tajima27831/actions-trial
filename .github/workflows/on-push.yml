@@ -1,7 +1,7 @@
+name: check diff
+
 on:
   push:
-    paths:
-        -**/*.md
 
 env:
   BASE_DIR: "./"
@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
+    
       - name: check files
         run: |
           git fetch origin "${{ github.event.before }}" --depth=1
