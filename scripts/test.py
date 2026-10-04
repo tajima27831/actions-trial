@@ -191,6 +191,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             if len(striped_line.split(":")) == 2:
                 nest_stack.append("ul")
                 main.append(indent_list[len(nest_stack)+2] + "<ul>")
+                continue
 
             #--------------------------------見出し-----------------------------------
             if len(striped_line.split(":")) == 3:
@@ -230,11 +231,11 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     header_contents.append(indent_list[len(nest_stack)*2+4] + "<a href=\"#" + section_id + "\">" + section_title + "</a>")
             continue
 
-        #-----------------------------------本文か見出しの項目------------------------------------
-        if nest_stack[-1] == "section":
-            main.append(indent_list[len(nest_stack)+3] + "<p>" + striped_line + "</p>")
-        if nest_stack[-1] == "ul":
+        #-----------------------------------本文か箇条書きの項目------------------------------------
+        if (len(nest_stack) > 0 and nest_stack[-1] == "ul"):
             main.append(indent_list[len(nest_stack)+4] + "<li>" + striped_line + "</li>")
+        else:
+            main.append(indent_list[len(nest_stack)+3] + "<p>" + striped_line + "</p>")
 
 #-------------------------------------------メインの最後にタグを閉じる------------------------
 while 0 < len(nest_stack): # ネストを同じ深さ以下にする
