@@ -191,13 +191,13 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 sys.exit(1)
             #------------------------------箇条書き----------------------------------
             if len(striped_line.split(":")) == 2:
-                nest_stack.append("ul")
+                nest_stack.append("u")
                 main.append(indent_list[len(nest_stack)+2] + "<ul>")
                 continue
 
             #--------------------------------見出し-----------------------------------
             if len(striped_line.split(":")) == 3:
-                if (len(nest_stack) > 0 and nest_stack[-1] == "ul"): # 箇条書きを閉じる
+                if (len(nest_stack) > 0 and nest_stack[-1] == "u"): # 箇条書きを閉じる
                     main.append(indent_list[len(nest_stack)+2] + "</ul>")
                     del nest_stack[-1:]
                 
@@ -224,7 +224,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     header_contents.append(indent_list[len(nest_stack)*2+4] + "<a href=\"#" + section_id + "\">" + section_title + "</a>")
                 
                 if len(section_id.split("/")) > len(nest_stack): # 新しい深さに入るとき
-                    nest_stack += "section"
+                    nest_stack += "s"
                     main.append("")
                     main.append(indent_list[len(nest_stack)+2] + "<section id=\"" + section_id + "\">")
                     print(nest_stack)
@@ -235,14 +235,14 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             continue
 
         #-----------------------------------本文か箇条書きの項目------------------------------------
-        if (len(nest_stack) > 0 and nest_stack[-1] == "ul"):
+        if (len(nest_stack) > 0 and nest_stack[-1] == "u"):
             main.append(indent_list[len(nest_stack)+4] + "<li>" + striped_line + "</li>")
         else:
             main.append(indent_list[len(nest_stack)+3] + "<p>" + striped_line + "</p>")
 
 #-------------------------------------------メインの最後にタグを閉じる------------------------
 while 0 < len(nest_stack): # ネストを同じ深さ以下にする
-    if (len(nest_stack) > 0 and nest_stack[-1] == "ul"): # 箇条書きを閉じる
+    if (len(nest_stack) > 0 and nest_stack[-1] == "u"): # 箇条書きを閉じる
         main.append(indent_list[len(nest_stack)+2] + "</ul>")
         del nest_stack[-1:]
         continue
