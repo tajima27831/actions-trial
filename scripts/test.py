@@ -203,7 +203,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                 
                 section_title = line.split(":")[1]
                 section_id = line.split(":")[2]
-                if not len(section_id.split("/"))*2 == len(line.split(":"))-2:
+                if not len(section_id.split("/"))*2 == len(line.split(":")[0])-2:
                     print("セクションのidのミス")
                     print(section_title + "  " + section_id)
                     sys.exit(1)
