@@ -17,7 +17,7 @@ jobs:
         run: |
           git fetch origin "${{ github.event.before }}" --depth=1
 
-          TARGETS=$(git diff -z --name-only --diff-filter=ACMR "${{ github.event.before }}.." "${{ env.BASE_DIR }}" -- '*.ts' '*.js' | tr '\0' '\n')
+          TARGETS=$(git diff -z --name-only --diff-filter=ACMR "${{ github.event.before }}.." "${{ env.BASE_DIR }}" -- '*.md'| tr '\0' '\n')
 
           echo "=== Detected Target Files ==="
           if [ -z "${TARGETS}" ]; then
