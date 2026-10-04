@@ -46,8 +46,8 @@ jobs:
           echo "${TARGETS}" | while IFS= read -r file; do
             [ -z "$file" ] && continue
 
-            echo "=== Executing: example.py $file ==="
-            python scripts.py "$file"
+            echo "=== Executing: scripts/test.py $file ==="
+            python scripts/test.py "$file"
           done
 
       - name: Git Push
