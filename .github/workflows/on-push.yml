@@ -5,6 +5,9 @@ on:
     paths:
         - '**.md'
 
+permissions:
+  contents: write
+
 env:
   BASE_DIR: "./"
 
