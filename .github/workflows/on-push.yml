@@ -12,10 +12,10 @@ jobs:
   foo:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v6
     
-      - name: check files
+      - name: Check Files
         run: |
           git fetch origin "${{ github.event.before }}" --depth=1
 
@@ -30,3 +30,34 @@ jobs:
           echo "============================="
 
           printf "TARGETS<<EOF\n%s\nEOF\n" "${TARGETS}" >> $GITHUB_ENV
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+
+      - name: Run Script for Each File
+        run: |
+          if [ -z "${TARGETS}" ]; then
+            echo "No target files to process."
+            exit 0
+          fi
+
+          echo "${TARGETS}" | while IFS= read -r file; do
+            [ -z "$file" ] && continue
+
+            echo "=== Executing: example.py $file ==="
+            python scripts.py "$file"
+          done
+
+      - name: Git Push
+        run: |
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          if ! git diff --cached --exit-code --quiet; then
+            git commit -m "chore: auto-update output.txt via GitHub Actions"
+            git push
+          else
+            echo "No changes detected. Skipping commit."
+          fi
