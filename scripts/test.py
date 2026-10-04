@@ -204,7 +204,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
                     main.append(indent_list[len(nest_stack)+2] + "</ul>")
                     del nest_stack[-1:]
                 
-                section_title = line.split(":")[1]
+                section_title = striped_line.split(":")[1]
                 section_id = line.split(":")[2]
                 if not len(section_id.split("/"))*2 == len(line.split(":")[0])-2:
                     print("セクションのidのミス")
@@ -268,5 +268,6 @@ with open(index_file_path, "w", encoding="utf-8") as result:
     print(*header_2, sep="\n", file=result)
     print(*header_contents, sep="\n", file=result)
     print(*header_3, sep="\n", file=result)
+    print("\n<hr>\n", file=result)
     print(*main, sep="\n", file=result)
     print(*footer, sep="\n", file=result)
