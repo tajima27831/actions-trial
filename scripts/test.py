@@ -239,6 +239,7 @@ with open(source_file_path, mode="r", encoding="utf-8") as source:
             continue
 
         #-----------------------------------本文か箇条書きの項目------------------------------------
+        # あとでここにリンクの置換による記法を追加
         if (len(nest_stack) > 0 and nest_stack[-1] == "u"):
             main.append(indent_list[len(nest_stack)+4] + "<li>" + striped_line + "</li>")
         else:
