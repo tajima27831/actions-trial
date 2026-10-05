@@ -3,12 +3,8 @@ name: Push File from Shortcut
 on:
   workflow_dispatch:
     inputs:
-      filename:
-        description: 'Target File Path (e.g., content/posts/my-note.md)'
-        required: true
-        type: string
-      content_b64:
-        description: 'Base64 Encoded Content'
+      filedata:
+        description: 'pathと中身を適切に形成してstringで渡す'
         required: true
         type: string
 
@@ -22,10 +18,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Create File Safely
-        env:
-          FILENAME: ${{ github.event.inputs.filename }}
-          CONTENT_B64: ${{ github.event.inputs.content_b64 }}
+      - name: Test
         run: |
-          mkdir -p "$(dirname "$FILENAME")"
-          echo "$CONTENT_B64" | base64 -d > "$FILENAME"
+          echo "$filedata"
