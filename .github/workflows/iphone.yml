@@ -1,0 +1,31 @@
+name: Push File from Shortcut
+
+on:
+  workflow_dispatch:
+    inputs:
+      filename:
+        description: 'Target File Path (e.g., content/posts/my-note.md)'
+        required: true
+        type: string
+      content_b64:
+        description: 'Base64 Encoded Content'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  commit-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Create File Safely
+        env:
+          FILENAME: ${{ github.event.inputs.filename }}
+          CONTENT_B64: ${{ github.event.inputs.content_b64 }}
+        run: |
+          mkdir -p "$(dirname "$FILENAME")"
+          echo "$CONTENT_B64" | base64 -d > "$FILENAME"
