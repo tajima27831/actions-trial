@@ -3,8 +3,12 @@ name: Push File from Shortcut
 on:
   workflow_dispatch:
     inputs:
-      filedata:
-        description: 'pathと中身を適切に形成してstringで渡す'
+      filename:
+        description: '**/source.mdの形'
+        required: true
+        type: string
+      content:
+        description: 'base64形式のテキスト'
         required: true
         type: string
 
@@ -18,6 +22,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Test
+      - name: Create File Safely
+        env:
+          FILENAME: ${{ github.event.inputs.filename }}
+          CONTENT_B64: ${{ github.event.inputs.content }}
         run: |
-          echo "The message is: ${{ inputs.filedata }}"
+          mkdir -p "$(dirname "$FILENAME")"
+          echo "$CONTENT_B64" | base64 -d > "$FILENAME"
+          
+      - name: Git Push
+        run: |
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          if ! git diff --cached --exit-code --quiet; then
+            git commit -m "chore: auto-update output.txt via GitHub Actions"
+            git push
+          else
+            echo "No changes detected. Skipping commit."
+          fi
